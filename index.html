@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="六角學院-todolist練習">
+    <!--越前面權重越高-->
+    <meta name="keywords" content="todolist練習">
+    <!--當我們網站連結 貼到臉書上時-->
+    <meta name="author" content="蔡宇軒 - github:pvt5r486">
+    <meta name="copyright" content="六角學院">
+    <meta property="og:title" content="todolist練習">
+    <meta property="og:description" content="todolist練習">
+    <meta property="og:type" content="website">
+    <meta property="og:image:width" content="">
+    <meta property="og:image:height" content="">
+    <meta property="og:image" content="">
+    <meta property="og:url" content="index.html">
+    <link rel="shortcut icon" href="images/todolist_icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css">
+    <link rel="stylesheet" href="stylesheets/all.css">
+    <title>我的待辦事項 - My first Vue </title>
+</head>
+
+<body>
+    <div id="app" class="container my-3">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">待辦事項</span>
+            </div>
+            <input type="text" class="form-control" placeholder="準備要做的任務" v-model="newTodo" @keyup.enter="addTodo">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="button" @click="addTodo">新增</button>
+            </div>
+        </div>
+        <div class="card text-center">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" :class="{'active': selectTab == 'all'}" @click.prevent="selectTab = 'all'">全部({{calcAll}})</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="#" :class="{'active': selectTab == 'doing'}" @click.prevent="selectTab = 'doing'">進行中({{calcDoing}})</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" :class="{'active': selectTab == 'finished'}" @click.prevent="selectTab = 'finished'">已完成({{calcFinished}})</a>
+                    </li>
+                </ul>
+            </div>
+            <ul class="list-group list-group-flush text-left">
+                <li class="list-group-item" v-for="item in filter" v-if="item.title" @dblclick="editTodo(item)">
+                    <div class="d-flex" v-if="item.id !== tempTodo.id">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" :id="item.id" v-model="item.isCompleted">
+                            <label class="form-check-label" :for="item.id" :class="{'completed': item.isCompleted}">
+                                {{item.title}}
+                            </label>
+                        </div>
+                        <button type="button" class="close ml-auto" aria-label="Close" @click="deleteTask(item)">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <input type="text" class="form-control" v-if="item.id == tempTodo.id" v-model="tempTitle"
+                        @keyup.esc="cancelEdit" @keyup.enter="editDone(item)">
+                </li>
+            </ul>
+            <div class="card-footer d-flex justify-content-between">
+                <span>還有 {{calcDoing}} 筆任務未完成</span>
+                <a href="#" @click.prevent="clearAll">清除所有任務</a>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
+    <script src="/javascript/all.js"></script>
+</body>
+</html>
